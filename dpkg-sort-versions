@@ -1,0 +1,17 @@
+#!/usr/bin/env python3
+import subprocess, sys, functools
+
+def isgreater(first, than_second):
+	if subprocess.call(['dpkg', '--compare-versions', f"{first}", 'gt', f"{than_second}"]) == 0:
+		return 1
+	if subprocess.call(['dpkg', '--compare-versions', f"{first}", 'lt', f"{than_second}"]) == 0:
+		return -1
+	if subprocess.call(['dpkg', '--compare-versions', f"{first}", 'eq', f"{than_second}"]) == 0:
+		return 0
+
+versions=sys.stdin.read().splitlines()
+
+print("Sorted from lowest (oldest) to highest (latest):", file=sys.stderr)
+
+for version in sorted(versions, key=functools.cmp_to_key(isgreater)):
+	print(version)
