@@ -19,11 +19,15 @@ git clone https://github.com/mschmitt/dpkg-sort-versions
 sudo make -C dpkg-sort-versions install
 ```
 
-# Description
+# Mission statement
 
-Implemented by calling `dpkg --compare-versions` as a subprocess.
+Sort debian version numbers using `dpkg --compare-versions` as the comparison algorithm without implementing the version scheme or relying on any third party implementation of the version scheme.
 
-The idea is to trust the native local **dpkg** API rather than any other implementation of the versioning scheme.
+## In comparison
+
+GNU `sort --version-sort`, at the time of this commit, does not know what to do with deb epoch prefixes.
+
+# Example
 
 ```
 $ ./dpkg-sort-versions < test.txt
@@ -50,4 +54,5 @@ Sorted stdin from lowest (oldest) to highest (latest):
 # See also
 
 * dpkg(1)
+* deb-version(7)
 * https://github.com/mschmitt/dpkg-sort-versions

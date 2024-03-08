@@ -23,13 +23,16 @@ git clone https://github.com/mschmitt/dpkg-sort-versions
 sudo make -C dpkg-sort-versions install
 \f[R]
 .fi
-.SH Description
+.SH Mission statement
 .PP
-Implemented by calling \f[C]dpkg --compare-versions\f[R] as a
-subprocess.
+Sort debian version numbers using \f[C]dpkg --compare-versions\f[R] as
+the comparison algorithm without implementing the version scheme or
+relying on any third party implementation of the version scheme.
+.SS In comparison
 .PP
-The idea is to trust the native local \f[B]dpkg\f[R] API rather than any
-other implementation of the versioning scheme.
+GNU \f[C]sort --version-sort\f[R], at the time of this commit, does not
+know what to do with deb epoch prefixes.
+.SH Example
 .IP
 .nf
 \f[C]
@@ -57,5 +60,7 @@ Sorted stdin from lowest (oldest) to highest (latest):
 .SH See also
 .IP \[bu] 2
 dpkg(1)
+.IP \[bu] 2
+deb-version(7)
 .IP \[bu] 2
 https://github.com/mschmitt/dpkg-sort-versions

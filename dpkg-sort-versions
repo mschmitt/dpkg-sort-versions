@@ -7,6 +7,7 @@ parser = argparse.ArgumentParser(
 		will attempt to read newline-delimited list from stdin.
 		'''
 	)
+parser.add_argument('-q', '--quiet', action='store_true', help='Do not explain sort order on stderr')
 parser.add_argument('versions', metavar='v', type=str, default=[], nargs='*', help='version numbers (default: none)')
 args = parser.parse_args()
 
@@ -20,11 +21,13 @@ def isgreater(first, than_second):
 
 if len(args.versions):
 	versions=args.versions
-	print("Sorted arguments from lowest (oldest) to highest (latest):", file=sys.stderr)
+	if args.quiet is not True:
+		print("Sorted arguments from lowest (oldest) to highest (latest):", file=sys.stderr)
 elif select.select([sys.stdin, ], [], [], 0.0)[0]:
 	# https://stackoverflow.com/a/3763257
 	versions=sys.stdin.read().splitlines()
-	print("Sorted stdin from lowest (oldest) to highest (latest):", file=sys.stderr)
+	if args.quiet is not True:
+		print("Sorted stdin from lowest (oldest) to highest (latest):", file=sys.stderr)
 else:
 	print("ERROR: No input on stdin and no arguments. Aborting." , file=sys.stderr)
 	sys.exit(1)
