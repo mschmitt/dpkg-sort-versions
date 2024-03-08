@@ -7,9 +7,9 @@
 # Synopsis
 
 ```
-dpkg-versions 1.0 1.0.1 1.0.1~foo
-dpkg-versions < list-of-versions.txt
-dpkg-versions -h
+dpkg-sort-versions 1.0 1.0.1 1.0.1~foo
+dpkg-sort-versions < list-of-versions.txt
+dpkg-sort-versions -h
 ```
 
 # Installation
