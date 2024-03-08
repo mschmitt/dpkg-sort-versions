@@ -1,5 +1,14 @@
 #!/usr/bin/env python3
-import subprocess, sys, functools
+import subprocess, sys, functools, argparse, select
+
+parser = argparse.ArgumentParser(
+	description='Visualize the order of dpkg package versions',
+	epilog='''If no version numbers are supplied on the command line, 
+		will attempt to read newline-delimited list from stdin.
+		'''
+	)
+parser.add_argument('versions', metavar='v', type=str, default=[], nargs='*', help='version numbers (default: none)')
+args = parser.parse_args()
 
 def isgreater(first, than_second):
 	if subprocess.call(['dpkg', '--compare-versions', f"{first}", 'gt', f"{than_second}"]) == 0:
@@ -9,9 +18,16 @@ def isgreater(first, than_second):
 	if subprocess.call(['dpkg', '--compare-versions', f"{first}", 'eq', f"{than_second}"]) == 0:
 		return 0
 
-versions=sys.stdin.read().splitlines()
-
-print("Sorted from lowest (oldest) to highest (latest):", file=sys.stderr)
+if len(args.versions):
+	versions=args.versions
+	print("Sorted arguments from lowest (oldest) to highest (latest):", file=sys.stderr)
+elif select.select([sys.stdin, ], [], [], 0.0)[0]:
+	# https://stackoverflow.com/a/3763257
+	versions=sys.stdin.read().splitlines()
+	print("Sorted stdin from lowest (oldest) to highest (latest):", file=sys.stderr)
+else:
+	print("ERROR: No input on stdin and no arguments. Aborting." , file=sys.stderr)
+	sys.exit(1)
 
 for version in sorted(versions, key=functools.cmp_to_key(isgreater)):
 	print(version)
